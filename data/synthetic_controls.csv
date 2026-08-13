@@ -1,0 +1,7 @@
+control,status,evidence
+Row completeness,Passed,48 of 48 expected rows
+Dimension integrity,Passed,All regions map to the controlled dimension
+Revenue validity,Passed,No zero or negative revenue values
+Margin bounds,Passed,Margins fall within configured limits
+P&L reconciliation,Passed,EBITDA reconciles to revenue × margin
+Scenario approval gate,Passed,AI narrative remains draft until finance approval
