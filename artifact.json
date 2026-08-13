@@ -1,0 +1,851 @@
+{
+  "surface": "dashboard",
+  "manifest": {
+    "version": 1,
+    "surface": "dashboard",
+    "title": "AI FP&A Decision Intelligence Platform",
+    "description": "A governed, synthetic executive FP&A portfolio case study.",
+    "generatedAt": "2026-08-13T20:00:00Z",
+    "cards": [
+      {
+        "id": "revenue",
+        "dataset": "kpis",
+        "sourceId": "model",
+        "description": "FY2026 outlook; six actual plus six forecast months.",
+        "metrics": [
+          {
+            "label": "Revenue outlook",
+            "field": "revenue",
+            "format": "currency"
+          },
+          {
+            "label": "vs budget",
+            "field": "revenue_vs_budget",
+            "format": "percent",
+            "signed": true
+          }
+        ]
+      },
+      {
+        "id": "margin",
+        "dataset": "kpis",
+        "sourceId": "model",
+        "description": "EBITDA divided by full-year outlook revenue.",
+        "metrics": [
+          {
+            "label": "EBITDA margin",
+            "field": "ebitda_margin",
+            "format": "percent"
+          },
+          {
+            "label": "EBITDA variance",
+            "field": "ebitda_vs_budget",
+            "format": "currency",
+            "signed": true
+          }
+        ]
+      },
+      {
+        "id": "fcf",
+        "dataset": "kpis",
+        "sourceId": "model",
+        "description": "EBITDA less capex, modeled tax and working-capital investment.",
+        "metrics": [
+          {
+            "label": "Free cash flow",
+            "field": "free_cash_flow",
+            "format": "currency"
+          }
+        ]
+      },
+      {
+        "id": "nwc",
+        "dataset": "kpis",
+        "sourceId": "model",
+        "description": "Revenue-weighted net working-capital days.",
+        "metrics": [
+          {
+            "label": "NWC days",
+            "field": "nwc_days",
+            "format": "number"
+          }
+        ]
+      },
+      {
+        "id": "accuracy",
+        "dataset": "kpis",
+        "sourceId": "model",
+        "description": "Illustrative one-minus-MAPE forecast accuracy.",
+        "metrics": [
+          {
+            "label": "Forecast accuracy",
+            "field": "forecast_accuracy",
+            "format": "percent"
+          }
+        ]
+      },
+      {
+        "id": "controls",
+        "dataset": "kpis",
+        "sourceId": "controls",
+        "description": "Share of configured deterministic controls passed.",
+        "metrics": [
+          {
+            "label": "Control pass rate",
+            "field": "control_pass_rate",
+            "format": "percent"
+          }
+        ]
+      }
+    ],
+    "charts": [
+      {
+        "id": "revenue_trend",
+        "title": "Monthly revenue: actual, forecast and budget",
+        "subtitle": "USD millions; actual through June, forecast from July",
+        "type": "line",
+        "dataset": "trend",
+        "sourceId": "model",
+        "encodings": {
+          "x": {
+            "field": "month",
+            "type": "ordinal"
+          },
+          "y": {
+            "fields": [
+              "actual_revenue",
+              "forecast_revenue",
+              "budget_revenue"
+            ],
+            "type": "quantitative"
+          }
+        },
+        "xAxisTitle": "Month",
+        "yAxisTitle": "Revenue (USD M)",
+        "valueFormat": "currency",
+        "layout": "full"
+      },
+      {
+        "id": "region_variance",
+        "title": "Revenue variance to budget by region",
+        "subtitle": "USD millions; sorted from largest shortfall",
+        "type": "bar",
+        "dataset": "regions",
+        "sourceId": "model",
+        "encodings": {
+          "x": {
+            "field": "region",
+            "type": "nominal"
+          },
+          "y": {
+            "field": "variance",
+            "type": "quantitative"
+          }
+        },
+        "xAxisTitle": "Region",
+        "yAxisTitle": "Variance (USD M)",
+        "valueFormat": "currency",
+        "layout": "half"
+      },
+      {
+        "id": "ebitda_bridge",
+        "title": "EBITDA outlook bridge",
+        "subtitle": "USD millions; additive drivers from budget to outlook",
+        "type": "waterfall",
+        "intent": "decomposition",
+        "dataset": "bridge",
+        "sourceId": "model",
+        "encodings": {
+          "x": {
+            "field": "driver",
+            "type": "nominal"
+          },
+          "y": {
+            "field": "impact",
+            "type": "quantitative"
+          }
+        },
+        "xAxisTitle": "Driver",
+        "yAxisTitle": "EBITDA impact (USD M)",
+        "valueFormat": "currency",
+        "layout": "half"
+      },
+      {
+        "id": "scenario_fcf",
+        "title": "Free cash flow by scenario",
+        "subtitle": "USD millions; transparent operating assumptions",
+        "type": "bar",
+        "dataset": "scenarios",
+        "sourceId": "scenario",
+        "encodings": {
+          "x": {
+            "field": "scenario",
+            "type": "nominal"
+          },
+          "y": {
+            "field": "free_cash_flow",
+            "type": "quantitative"
+          }
+        },
+        "xAxisTitle": "Scenario",
+        "yAxisTitle": "Free cash flow (USD M)",
+        "valueFormat": "currency",
+        "layout": "half"
+      },
+      {
+        "id": "cash_conversion",
+        "title": "Working-capital days by region",
+        "subtitle": "Revenue-weighted outlook; lower is better",
+        "type": "bar",
+        "dataset": "regions",
+        "sourceId": "model",
+        "encodings": {
+          "x": {
+            "field": "region",
+            "type": "nominal"
+          },
+          "y": {
+            "field": "nwc_days",
+            "type": "quantitative"
+          }
+        },
+        "xAxisTitle": "Region",
+        "yAxisTitle": "NWC days",
+        "valueFormat": "number",
+        "layout": "half"
+      }
+    ],
+    "tables": [
+      {
+        "id": "scenario_table",
+        "title": "Executive scenario decision table",
+        "subtitle": "All values are synthetic and illustrative",
+        "dataset": "scenarios",
+        "sourceId": "scenario",
+        "defaultSort": {
+          "field": "revenue",
+          "direction": "desc"
+        },
+        "density": "dense",
+        "layout": "full",
+        "columns": [
+          {
+            "field": "scenario",
+            "label": "Scenario"
+          },
+          {
+            "field": "revenue",
+            "label": "Revenue",
+            "format": "currency"
+          },
+          {
+            "field": "ebitda",
+            "label": "EBITDA",
+            "format": "currency"
+          },
+          {
+            "field": "ebitda_margin",
+            "label": "Margin",
+            "format": "percent"
+          },
+          {
+            "field": "free_cash_flow",
+            "label": "FCF",
+            "format": "currency"
+          },
+          {
+            "field": "nwc_days",
+            "label": "NWC days",
+            "format": "number"
+          },
+          {
+            "field": "management_posture",
+            "label": "Management posture"
+          }
+        ]
+      },
+      {
+        "id": "actions_table",
+        "title": "Prioritized risks and management actions",
+        "subtitle": "Evidence-backed recommendations; human approval required",
+        "dataset": "actions",
+        "sourceId": "model",
+        "defaultSort": {
+          "field": "priority",
+          "direction": "asc"
+        },
+        "density": "dense",
+        "layout": "full",
+        "columns": [
+          {
+            "field": "priority",
+            "label": "Priority",
+            "format": "number"
+          },
+          {
+            "field": "signal",
+            "label": "Signal"
+          },
+          {
+            "field": "evidence",
+            "label": "Evidence"
+          },
+          {
+            "field": "recommended_action",
+            "label": "Recommended action"
+          },
+          {
+            "field": "owner",
+            "label": "Owner"
+          },
+          {
+            "field": "approval",
+            "label": "Approval"
+          }
+        ]
+      },
+      {
+        "id": "controls_table",
+        "title": "Data and AI control register",
+        "subtitle": "Pre-publication checks for trustworthy finance narratives",
+        "dataset": "quality",
+        "sourceId": "controls",
+        "defaultSort": {
+          "field": "control",
+          "direction": "asc"
+        },
+        "density": "dense",
+        "layout": "full",
+        "columns": [
+          {
+            "field": "control",
+            "label": "Control"
+          },
+          {
+            "field": "status",
+            "label": "Status"
+          },
+          {
+            "field": "evidence",
+            "label": "Evidence"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "model",
+        "label": "Synthetic finance model",
+        "path": "data/synthetic_finance_detail.csv",
+        "query": {
+          "engine": "duckdb",
+          "sql": "SELECT * FROM read_csv_auto('data/synthetic_finance_detail.csv')",
+          "description": "Revenue and EBITDA aggregate monthly at region grain; outlook combines six actual and six forecast months.",
+          "executed_at": "2026-08-13T20:00:00Z",
+          "tables_used": [
+            "data/synthetic_finance_detail.csv"
+          ],
+          "filters": [
+            "FY2026",
+            "synthetic data",
+            "USD millions"
+          ],
+          "metric_definitions": [
+            "Revenue and EBITDA aggregate monthly at region grain; outlook combines six actual and six forecast months."
+          ]
+        }
+      },
+      {
+        "id": "scenario",
+        "label": "Scenario model",
+        "path": "data/synthetic_scenarios.csv",
+        "query": {
+          "engine": "duckdb",
+          "sql": "SELECT * FROM read_csv_auto('data/synthetic_scenarios.csv')",
+          "description": "Scenarios apply transparent revenue, margin and working-capital assumptions to the base outlook.",
+          "executed_at": "2026-08-13T20:00:00Z",
+          "tables_used": [
+            "data/synthetic_scenarios.csv"
+          ],
+          "filters": [
+            "FY2026",
+            "synthetic data",
+            "USD millions"
+          ],
+          "metric_definitions": [
+            "Scenarios apply transparent revenue, margin and working-capital assumptions to the base outlook."
+          ]
+        }
+      },
+      {
+        "id": "controls",
+        "label": "Data and AI controls",
+        "path": "data/synthetic_controls.csv",
+        "query": {
+          "engine": "duckdb",
+          "sql": "SELECT * FROM read_csv_auto('data/synthetic_controls.csv')",
+          "description": "Control pass rate is passed checks divided by configured checks.",
+          "executed_at": "2026-08-13T20:00:00Z",
+          "tables_used": [
+            "data/synthetic_controls.csv"
+          ],
+          "filters": [
+            "FY2026",
+            "synthetic data",
+            "USD millions"
+          ],
+          "metric_definitions": [
+            "Control pass rate is passed checks divided by configured checks."
+          ]
+        }
+      }
+    ],
+    "blocks": [
+      {
+        "id": "intro",
+        "type": "markdown",
+        "body": "# AI FP&A Decision Intelligence Platform\n\n**Illustrative synthetic company \u00b7 FY2026 outlook \u00b7 USD millions**\n\nA governed executive command center connecting rolling forecasts, variance intelligence, scenario decisions and AI-ready management narratives."
+      },
+      {
+        "id": "kpi_strip",
+        "type": "metric-strip",
+        "cardIds": [
+          "revenue",
+          "margin",
+          "fcf",
+          "nwc",
+          "accuracy",
+          "controls"
+        ]
+      },
+      {
+        "id": "trend",
+        "type": "chart",
+        "chartId": "revenue_trend",
+        "layout": "full"
+      },
+      {
+        "id": "decision_context",
+        "type": "markdown",
+        "body": "### Governed executive brief\n\nFull-year revenue is forecast at **USD 710.3M**, **0.0% above budget**. EBITDA is **USD 141.5M** at a **19.9% margin**. The primary regional watch item is **EMEA**, where revenue is **2.2% below plan**. Under the downside scenario, free cash flow falls to **USD 72.3M** and working-capital days rise to **62**. Management should protect price realization, stage discretionary spending, and assign weekly ownership for collections and inventory actions.\n\n*Control status: generated only from validated model outputs; synthetic data; finance approval required before use.*",
+        "sourceId": "model"
+      },
+      {
+        "id": "region",
+        "type": "chart",
+        "chartId": "region_variance",
+        "layout": "half"
+      },
+      {
+        "id": "bridge",
+        "type": "chart",
+        "chartId": "ebitda_bridge",
+        "layout": "half"
+      },
+      {
+        "id": "scenario_chart",
+        "type": "chart",
+        "chartId": "scenario_fcf",
+        "layout": "half"
+      },
+      {
+        "id": "cash",
+        "type": "chart",
+        "chartId": "cash_conversion",
+        "layout": "half"
+      },
+      {
+        "id": "scenario_decisions",
+        "type": "table",
+        "tableId": "scenario_table",
+        "layout": "full"
+      },
+      {
+        "id": "actions",
+        "type": "table",
+        "tableId": "actions_table",
+        "layout": "full"
+      },
+      {
+        "id": "governance",
+        "type": "markdown",
+        "body": "## Trust before automation\n\nThe narrative layer is grounded in reconciled model outputs. No employer data, customer data or private credentials are used. Recommendations remain drafts until a finance leader approves them. The design follows the NIST AI RMF principles of governing, mapping, measuring and managing AI risk."
+      },
+      {
+        "id": "control_register",
+        "type": "table",
+        "tableId": "controls_table",
+        "layout": "full"
+      }
+    ]
+  },
+  "snapshot": {
+    "version": 1,
+    "generatedAt": "2026-08-13T20:00:00Z",
+    "status": "fixture",
+    "datasets": {
+      "kpis": [
+        {
+          "revenue": 710.33,
+          "revenue_vs_budget": 0.0003,
+          "ebitda": 141.49,
+          "ebitda_margin": 0.1992,
+          "ebitda_vs_budget": -1.1,
+          "free_cash_flow": 86.45,
+          "nwc_days": 57.1,
+          "forecast_accuracy": 0.924,
+          "control_pass_rate": 1.0
+        }
+      ],
+      "trend": [
+        {
+          "month": "Jan 2026",
+          "month_index": 1,
+          "actual_revenue": 53.48,
+          "forecast_revenue": null,
+          "budget_revenue": 53.64,
+          "outlook_ebitda": 10.69,
+          "budget_ebitda": 10.77
+        },
+        {
+          "month": "Feb 2026",
+          "month_index": 2,
+          "actual_revenue": 54.98,
+          "forecast_revenue": null,
+          "budget_revenue": 54.8,
+          "outlook_ebitda": 10.94,
+          "budget_ebitda": 11.0
+        },
+        {
+          "month": "Mar 2026",
+          "month_index": 3,
+          "actual_revenue": 58.61,
+          "forecast_revenue": null,
+          "budget_revenue": 58.3,
+          "outlook_ebitda": 11.65,
+          "budget_ebitda": 11.71
+        },
+        {
+          "month": "Apr 2026",
+          "month_index": 4,
+          "actual_revenue": 56.56,
+          "forecast_revenue": null,
+          "budget_revenue": 57.13,
+          "outlook_ebitda": 11.25,
+          "budget_ebitda": 11.47
+        },
+        {
+          "month": "May 2026",
+          "month_index": 5,
+          "actual_revenue": 59.1,
+          "forecast_revenue": null,
+          "budget_revenue": 59.47,
+          "outlook_ebitda": 11.83,
+          "budget_ebitda": 11.94
+        },
+        {
+          "month": "Jun 2026",
+          "month_index": 6,
+          "actual_revenue": 60.05,
+          "forecast_revenue": 60.05,
+          "budget_revenue": 60.63,
+          "outlook_ebitda": 12.0,
+          "budget_ebitda": 12.18
+        },
+        {
+          "month": "Jul 2026",
+          "month_index": 7,
+          "actual_revenue": null,
+          "forecast_revenue": 56.83,
+          "budget_revenue": 56.55,
+          "outlook_ebitda": 11.34,
+          "budget_ebitda": 11.36
+        },
+        {
+          "month": "Aug 2026",
+          "month_index": 8,
+          "actual_revenue": null,
+          "forecast_revenue": 57.42,
+          "budget_revenue": 57.72,
+          "outlook_ebitda": 11.48,
+          "budget_ebitda": 11.59
+        },
+        {
+          "month": "Sep 2026",
+          "month_index": 9,
+          "actual_revenue": null,
+          "forecast_revenue": 60.05,
+          "budget_revenue": 60.05,
+          "outlook_ebitda": 11.93,
+          "budget_ebitda": 12.06
+        },
+        {
+          "month": "Oct 2026",
+          "month_index": 10,
+          "actual_revenue": null,
+          "forecast_revenue": 61.94,
+          "budget_revenue": 61.21,
+          "outlook_ebitda": 12.28,
+          "budget_ebitda": 12.29
+        },
+        {
+          "month": "Nov 2026",
+          "month_index": 11,
+          "actual_revenue": null,
+          "forecast_revenue": 63.14,
+          "budget_revenue": 62.96,
+          "outlook_ebitda": 12.55,
+          "budget_ebitda": 12.64
+        },
+        {
+          "month": "Dec 2026",
+          "month_index": 12,
+          "actual_revenue": null,
+          "forecast_revenue": 68.17,
+          "budget_revenue": 67.63,
+          "outlook_ebitda": 13.54,
+          "budget_ebitda": 13.58
+        }
+      ],
+      "regions": [
+        {
+          "region": "EMEA",
+          "budget_revenue": 195.88,
+          "outlook_revenue": 191.5,
+          "variance": -4.37,
+          "variance_pct": -0.0223,
+          "ebitda_margin": 0.1913,
+          "free_cash_flow": 22.25,
+          "nwc_days": 59.0
+        },
+        {
+          "region": "Latin America",
+          "budget_revenue": 89.59,
+          "outlook_revenue": 86.11,
+          "variance": -3.48,
+          "variance_pct": -0.0388,
+          "ebitda_margin": 0.1561,
+          "free_cash_flow": 7.55,
+          "nwc_days": 73.0
+        },
+        {
+          "region": "North America",
+          "budget_revenue": 280.73,
+          "outlook_revenue": 284.57,
+          "variance": 3.84,
+          "variance_pct": 0.0137,
+          "ebitda_margin": 0.2285,
+          "free_cash_flow": 41.6,
+          "nwc_days": 47.0
+        },
+        {
+          "region": "APAC",
+          "budget_revenue": 143.91,
+          "outlook_revenue": 148.15,
+          "variance": 4.24,
+          "variance_pct": 0.0295,
+          "ebitda_margin": 0.1782,
+          "free_cash_flow": 15.05,
+          "nwc_days": 65.0
+        }
+      ],
+      "bridge": [
+        {
+          "driver": "Budget EBITDA",
+          "impact": 142.59,
+          "order": 0
+        },
+        {
+          "driver": "Price",
+          "impact": 2.31,
+          "order": 1
+        },
+        {
+          "driver": "Volume",
+          "impact": -2.52,
+          "order": 2
+        },
+        {
+          "driver": "Mix",
+          "impact": 0.19,
+          "order": 3
+        },
+        {
+          "driver": "Inflation",
+          "impact": -1.34,
+          "order": 4
+        },
+        {
+          "driver": "Productivity",
+          "impact": 0.94,
+          "order": 5
+        },
+        {
+          "driver": "FX",
+          "impact": -0.67,
+          "order": 6
+        },
+        {
+          "driver": "Outlook EBITDA",
+          "impact": 0,
+          "order": 7
+        }
+      ],
+      "scenarios": [
+        {
+          "scenario": "Upside",
+          "revenue": 735.2,
+          "ebitda": 153.79,
+          "ebitda_margin": 0.2092,
+          "free_cash_flow": 95.31,
+          "nwc_days": 54.1,
+          "management_posture": "Fund growth while protecting service levels"
+        },
+        {
+          "scenario": "Base",
+          "revenue": 710.33,
+          "ebitda": 141.49,
+          "ebitda_margin": 0.1992,
+          "free_cash_flow": 86.45,
+          "nwc_days": 57.1,
+          "management_posture": "Execute pricing and working-capital actions"
+        },
+        {
+          "scenario": "Downside",
+          "revenue": 678.37,
+          "ebitda": 125.62,
+          "ebitda_margin": 0.1852,
+          "free_cash_flow": 72.28,
+          "nwc_days": 62.1,
+          "management_posture": "Stage discretionary spend and accelerate collections"
+        }
+      ],
+      "actions": [
+        {
+          "priority": 1,
+          "signal": "EMEA revenue below plan",
+          "evidence": "Variance -2.2%",
+          "recommended_action": "Review pipeline conversion, price realization and discretionary spend",
+          "owner": "Regional CFO",
+          "approval": "Required"
+        },
+        {
+          "priority": 2,
+          "signal": "Latin America cash conversion",
+          "evidence": "NWC 73 days",
+          "recommended_action": "Launch collections and inventory plan with weekly milestones",
+          "owner": "Finance + Operations",
+          "approval": "Required"
+        },
+        {
+          "priority": 3,
+          "signal": "Margin protection opportunity",
+          "evidence": "Pricing and productivity partly offset volume and inflation",
+          "recommended_action": "Lock accountable benefits into the rolling forecast",
+          "owner": "FP&A",
+          "approval": "Required"
+        }
+      ],
+      "quality": [
+        {
+          "control": "Row completeness",
+          "status": "Passed",
+          "evidence": "48 of 48 expected rows"
+        },
+        {
+          "control": "Dimension integrity",
+          "status": "Passed",
+          "evidence": "All regions map to the controlled dimension"
+        },
+        {
+          "control": "Revenue validity",
+          "status": "Passed",
+          "evidence": "No zero or negative revenue values"
+        },
+        {
+          "control": "Margin bounds",
+          "status": "Passed",
+          "evidence": "Margins fall within configured limits"
+        },
+        {
+          "control": "P&L reconciliation",
+          "status": "Passed",
+          "evidence": "EBITDA reconciles to revenue \u00d7 margin"
+        },
+        {
+          "control": "Scenario approval gate",
+          "status": "Passed",
+          "evidence": "AI narrative remains draft until finance approval"
+        }
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "model",
+      "label": "Synthetic finance model",
+      "path": "data/synthetic_finance_detail.csv",
+      "query": {
+        "engine": "duckdb",
+        "sql": "SELECT * FROM read_csv_auto('data/synthetic_finance_detail.csv')",
+        "description": "Revenue and EBITDA aggregate monthly at region grain; outlook combines six actual and six forecast months.",
+        "executed_at": "2026-08-13T20:00:00Z",
+        "tables_used": [
+          "data/synthetic_finance_detail.csv"
+        ],
+        "filters": [
+          "FY2026",
+          "synthetic data",
+          "USD millions"
+        ],
+        "metric_definitions": [
+          "Revenue and EBITDA aggregate monthly at region grain; outlook combines six actual and six forecast months."
+        ]
+      }
+    },
+    {
+      "id": "scenario",
+      "label": "Scenario model",
+      "path": "data/synthetic_scenarios.csv",
+      "query": {
+        "engine": "duckdb",
+        "sql": "SELECT * FROM read_csv_auto('data/synthetic_scenarios.csv')",
+        "description": "Scenarios apply transparent revenue, margin and working-capital assumptions to the base outlook.",
+        "executed_at": "2026-08-13T20:00:00Z",
+        "tables_used": [
+          "data/synthetic_scenarios.csv"
+        ],
+        "filters": [
+          "FY2026",
+          "synthetic data",
+          "USD millions"
+        ],
+        "metric_definitions": [
+          "Scenarios apply transparent revenue, margin and working-capital assumptions to the base outlook."
+        ]
+      }
+    },
+    {
+      "id": "controls",
+      "label": "Data and AI controls",
+      "path": "data/synthetic_controls.csv",
+      "query": {
+        "engine": "duckdb",
+        "sql": "SELECT * FROM read_csv_auto('data/synthetic_controls.csv')",
+        "description": "Control pass rate is passed checks divided by configured checks.",
+        "executed_at": "2026-08-13T20:00:00Z",
+        "tables_used": [
+          "data/synthetic_controls.csv"
+        ],
+        "filters": [
+          "FY2026",
+          "synthetic data",
+          "USD millions"
+        ],
+        "metric_definitions": [
+          "Control pass rate is passed checks divided by configured checks."
+        ]
+      }
+    }
+  ]
+}
